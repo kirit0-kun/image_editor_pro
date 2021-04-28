@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:image_editor_pro/modules/all_emojies.dart';
 import 'package:image_editor_pro/modules/bottombar_container.dart';
 import 'package:image_editor_pro/modules/colors_picker.dart';
 import 'package:image_editor_pro/modules/emoji.dart';
 import 'package:image_editor_pro/modules/text.dart';
 import 'package:image_editor_pro/modules/textview.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:signature/signature.dart';
@@ -210,9 +210,15 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                     Expanded(
                       child: Center(
                         child: Container(
-                          margin: const EdgeInsetsDirectional.only(start: 20, top: 20),
+                          margin: const EdgeInsetsDirectional.only(
+                              start: 20, top: 20),
                           clipBehavior: Clip.hardEdge,
-                          decoration: ShapeDecoration(color: Colors.white, shape: ContinuousRectangleBorder(side: BorderSide(width: 2.0, color: Colors.black)),),
+                          decoration: ShapeDecoration(
+                            color: Colors.white,
+                            shape: ContinuousRectangleBorder(
+                                side: BorderSide(
+                                    width: 2.0, color: Colors.black)),
+                          ),
                           child: Screenshot(
                             controller: screenshotController,
                             child: Container(
@@ -225,20 +231,29 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                                   child: Stack(
                                     children: <Widget>[
                                       _image != null
-                                          ? Transform.rotate(angle: angle, child: Transform.scale(scale: scale, child: Image.file(
-                                        _image,
-                                        height: height.toDouble(),
-                                        width: width.toDouble(),
-                                        fit: BoxFit.cover,
-                                      ),),)
+                                          ? Transform.rotate(
+                                              angle: angle,
+                                              child: Transform.scale(
+                                                scale: scale,
+                                                child: Image.file(
+                                                  _image,
+                                                  height: height.toDouble(),
+                                                  width: width.toDouble(),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            )
                                           : Container(),
                                       Container(
                                         child: GestureDetector(
-                                            onPanUpdate: (DragUpdateDetails details) {
+                                            onPanUpdate:
+                                                (DragUpdateDetails details) {
                                               setState(() {
-                                                RenderBox object = context.findRenderObject();
-                                                var _localPosition = object
-                                                    .globalToLocal(details.globalPosition);
+                                                RenderBox object =
+                                                    context.findRenderObject();
+                                                var _localPosition =
+                                                    object.globalToLocal(
+                                                        details.globalPosition);
                                                 _points = List.from(_points)
                                                   ..add(_localPosition);
                                               });
@@ -249,59 +264,78 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                                             child: Signat()),
                                       ),
                                       Stack(
-                                        children: multiwidget.asMap().entries.map((f) {
+                                        children: multiwidget
+                                            .asMap()
+                                            .entries
+                                            .map((f) {
                                           return type[f.key] == 1
                                               ? EmojiView(
-                                            left: offsets[f.key].dx,
-                                            top: offsets[f.key].dy,
-                                            ontap: () {
-                                              scaf.currentState
-                                                  .showBottomSheet((context) {
-                                                return Sliders(
-                                                  size: f.key,
-                                                  sizevalue: fontsize[f.key].toDouble(),
-                                                );
-                                              });
-                                            },
-                                            onpanupdate: (details) {
-                                              setState(() {
-                                                offsets[f.key] = Offset(
-                                                    offsets[f.key].dx + details.delta.dx,
-                                                    offsets[f.key].dy + details.delta.dy);
-                                              });
-                                            },
-                                            value: f.value.toString(),
-                                            fontsize: fontsize[f.key].toDouble(),
-                                            align: TextAlign.center,
-                                          )
+                                                  left: offsets[f.key].dx,
+                                                  top: offsets[f.key].dy,
+                                                  ontap: () {
+                                                    scaf.currentState
+                                                        .showBottomSheet(
+                                                            (context) {
+                                                      return Sliders(
+                                                        size: f.key,
+                                                        sizevalue:
+                                                            fontsize[f.key]
+                                                                .toDouble(),
+                                                      );
+                                                    });
+                                                  },
+                                                  onpanupdate: (details) {
+                                                    setState(() {
+                                                      offsets[f.key] = Offset(
+                                                          offsets[f.key].dx +
+                                                              details.delta.dx,
+                                                          offsets[f.key].dy +
+                                                              details.delta.dy);
+                                                    });
+                                                  },
+                                                  value: f.value.toString(),
+                                                  fontsize: fontsize[f.key]
+                                                      .toDouble(),
+                                                  align: TextAlign.center,
+                                                )
                                               : type[f.key] == 2
-                                              ? TextView(
-                                            left: offsets[f.key].dx,
-                                            top: offsets[f.key].dy,
-                                            ontap: () {
-                                              scaf.currentState
-                                                  .showBottomSheet((context) {
-                                                return Sliders(
-                                                  size: f.key,
-                                                  sizevalue:
-                                                  fontsize[f.key].toDouble(),
-                                                );
-                                              });
-                                            },
-                                            onpanupdate: (details) {
-                                              setState(() {
-                                                offsets[f.key] = Offset(
-                                                    offsets[f.key].dx +
-                                                        details.delta.dx,
-                                                    offsets[f.key].dy +
-                                                        details.delta.dy);
-                                              });
-                                            },
-                                            value: f.value.toString(),
-                                            fontsize: fontsize[f.key].toDouble(),
-                                            align: TextAlign.center,
-                                          )
-                                              : Container();
+                                                  ? TextView(
+                                                      left: offsets[f.key].dx,
+                                                      top: offsets[f.key].dy,
+                                                      ontap: () {
+                                                        scaf.currentState
+                                                            .showBottomSheet(
+                                                                (context) {
+                                                          return Sliders(
+                                                            size: f.key,
+                                                            sizevalue:
+                                                                fontsize[f.key]
+                                                                    .toDouble(),
+                                                          );
+                                                        });
+                                                      },
+                                                      onpanupdate: (details) {
+                                                        setState(() {
+                                                          offsets[f.key] =
+                                                              Offset(
+                                                                  offsets[f.key]
+                                                                          .dx +
+                                                                      details
+                                                                          .delta
+                                                                          .dx,
+                                                                  offsets[f.key]
+                                                                          .dy +
+                                                                      details
+                                                                          .delta
+                                                                          .dy);
+                                                        });
+                                                      },
+                                                      value: f.value.toString(),
+                                                      fontsize: fontsize[f.key]
+                                                          .toDouble(),
+                                                      align: TextAlign.center,
+                                                    )
+                                                  : Container();
                                         }).toList(),
                                       )
                                     ],
@@ -313,12 +347,12 @@ class _ImageEditorProState extends State<ImageEditorPro> {
                     ),
                     if (_image != null)
                       Slider.adaptive(
-                          value: angle,
+                          value: -angle,
                           min: 0,
                           max: pi,
                           onChanged: (newValue) {
                             setState(() {
-                              angle = newValue;
+                              angle = -newValue;
                             });
                           })
                   ],
